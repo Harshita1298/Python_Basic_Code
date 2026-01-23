@@ -1,0 +1,7 @@
+import pandas as pd
+harsh=pd.read_csv('Book1.csv')
+print(harsh)
+print(harsh['City'])
+# Modify the value in the 'City' column for the first row
+harsh['City'][0]='Xgud'
+print(harsh)
