@@ -2,88 +2,64 @@ import tkinter as tk
 
 # Window
 root = tk.Tk()
-root.title("Typing Effect")
-root.geometry("700x400")
+root.title("Love Lyrics Effect")
+root.geometry("800x400")
 root.configure(bg="pink")
 
-# Label (perfect center)
+# Top LOVE text
+love_label = tk.Label(
+    root,
+    text="LOVE ❤️",
+    font=("Comic Sans MS", 28, "bold"),
+    bg="pink",
+    fg="red"
+)
+love_label.pack(pady=10)
+
+# Center lyric label
 label = tk.Label(
     root,
     text="",
-    font=("Arial", 22, "bold"),
+    font=("Comic Sans MS", 22, "bold"),
     bg="pink",
-    fg="blue"
+    fg="blue",
+    wraplength=700,
+    justify="center"
 )
-label.place(relx=0.5, rely=0.5, anchor="center")  # center both sides
+label.place(relx=0.5, rely=0.55, anchor="center")
 
-# Text to show (dummy lyrics)
-text ="""Tum mile, toh mil gaya yeh jahaan
+# Lyrics (example – short rakho demo ke liye)
+lyrics = """Tum mile, toh mil gaya yeh jahaan
 Tum mile, toh har pal hai naya
-Tum mile, toh sabse hai, faasla
 Tum mile, toh jaadu chaa gaya
-Tum mile, toh jeena aa gaya
-Tum mile, toh maine paaya, hai khuda…
+Tum mile, toh jeena aa gaya"""
 
-Come around, it’s time to baby, come around
-Come on now come around
-It’s time to baby, come around
-Come around, come around…
+lines = lyrics.split("\n")
 
-Palken moondein, chaahat meri so rahi thi
-Khushboo hawaaon mein thi maine nahin mehsoos ki
-Umm mm, jaane kahaan, bahaaren meri khil rahi thi
-Khushboo hawaaon mein thi maine nahin mehsoos ki…
-
-Tum mile, toh mehki baarishen
-Tum mile, toh jaagi khwaahishen
-Tum mile, toh rangon ka hai, silsila
-Tum mile, toh jaadu chaa gaya
-Tum mile, toh jeena aa gaya
-Tum mile, toh maine paaya, hai khuda…
-
-Ta ra ra, ta ra ra, ta ra ra…
-
-Tune duaaein suni, dil ki sadaaye suni
-Tujh se main maangu aur kya
-Tujh bin adhura hu main, tere sang poora hu main
-Karta hun tera shukriya…
-
-(Kaise kahoon) * 4
-Kaise kahoon, lamhe mujhe chu rahe hain
-Aisa laga hain in mein tera hi toh ehsaas hain
-Oh ho, kaise kahoon, dil mein nayi aahatein hain
-Aisa laga hain in mein tera hi toh ehsaas hain…
-
-Tum mile, toh mera dil gaya
-Tum mile, toh sab kuch mil gaya
-Tum mile, toh logon se kya, vaasta ho oh
-Tum mile, toh jaadu chaa gaya
-Tum mile, toh jeena aa gaya
-Tum mile, toh maine paaya, hai khuda…"""
-index = 0
-deleting = True
+line_index = 0
+char_index = 0
 
 def animate():
-    global index, deleting
+    global line_index, char_index
 
-    if not deleting:
-        # Typing
-        if index <= len(text):
-            label.config(text=text[:index])
-            index += 1
-            root.after(120, animate)
-        else:
-            deleting = True
-            root.after(800, animate)  # pause before deleting
+    current_line = lines[line_index]
+
+    # Typing effect (no deleting)
+    if char_index <= len(current_line):
+        label.config(text=current_line[:char_index])
+        char_index += 1
+        root.after(120, animate)
     else:
-        # Deleting
-        if index >= 0:
-            label.config(text=text[:index])
-            index -= 1
-            root.after(80, animate)
-        else:
-            deleting = False
-            root.after(500, animate)
+        # Line complete → pause → next line
+        root.after(1100, next_line)
+
+def next_line():
+    global line_index, char_index
+
+    char_index = 0
+    line_index = (line_index + 1) % len(lines)
+    label.config(text="")   # old line instantly clear
+    animate()
 
 animate()
 root.mainloop()
